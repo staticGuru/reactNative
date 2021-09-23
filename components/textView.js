@@ -28,115 +28,6 @@ const TextView = () => {
   var splitDataNumber = secondInputValue.split(' ').length;
   //   console.log(showUserModal, 'showUserModal');
   const textInputRef = useRef(null);
-  // console.log(splitDataNumber,'splitDataNumber secondInputValue', secondInputValue, "inputValue",inputValue);
-  // useEffect(() => {
-  //   renderSuggestions();
-  // }, [backspace]);
-
-  // useEffect(() => {
-  //   if (showUserModal === true) {
-  //     if (
-  //       secondInputValue
-  //         .split(' ')
-  //         [secondInputValue.split(' ').length - 1].charAt(0) == '@'
-  //     ) {
-  //       setInputData('User');
-  //     } else if (
-  //       secondInputValue
-  //         .split(' ')
-  //         [secondInputValue.split(' ').length - 1].charAt(0) == '#'
-  //     ) {
-  //       setInputData('Topic');
-  //     } else {
-  //       setInputData('');
-  //     }
-  //   }
-  // }, [showUserModal, secondInputValue]);
-  //   useEffect(() => {
-  //     //     if (inputValue == '') {
-  //     //       setShowUserModal(false);
-  //     //     }
-  //     //     if (inputValue == '@') {
-  //     //       console.log('@ is presed');
-  //     //     }
-  //     if (inputValue.length !== 0) {
-  //       if (inputValue.split(' ')[inputValue.split(' ').length - 1]) {
-  //         // console.log("entered in the input value")
-  //         console.log(
-  //           inputValue.split(' ')[inputValue.split(' ').length - 1].charAt(0),
-  //           'input value',
-  //         );
-  //         if (
-  //           inputValue.split(' ')[inputValue.split(' ').length - 1].charAt(0) ==
-  //           '@'
-  //         ) {
-  //           setShowUserModal(true);
-  // } else if (
-  //   inputValue.split(' ')[inputValue.split(' ').length - 1].charAt(0) ==
-  //   '#'
-  // ) {
-  //   setShowUserModal(true);
-  // } else {
-  //   setShowUserModal(false);
-  // }
-  //       }
-  //     }
-  //   }, [inputValue]);
-  // useEffect(() => {
-  //   setSecondInputValue(inputValue);
-  //   setInputValue('');
-  // }, [count]);
-  // console.log(count, '-------------');
-  // useEffect(() => {
-  //   // console.log(splitDataNumber, 'splitDataNumber');
-  //   if (
-  //     secondInputValue
-  //       .split(' ')
-  //       [secondInputValue.split(' ').length - 1].charAt(0) == '@'
-  //   ) {
-  //     setShowUserModal(true);
-  //   } else if (
-  //     secondInputValue
-  //       .split(' ')
-  //       [secondInputValue.split(' ').length - 1].charAt(0) == '#'
-  //   ) {
-  //     setShowUserModal(true);
-  //   } else {
-  //     setShowUserModal(false);
-  //   }
-  //   //     setInputValue(secondInputValue);
-  //   //     setSecondInputValue('');
-  // }, [secondInputValue]);
-  // useEffect(() => {
-  //   console.log(
-  //     globelArray.filter(e => e !== ''),
-  //     'globelArray',
-  //   );
-
-  //   console.log(
-  //     globelArray.includes(secondInputValue.trim()),
-  //     'trim',
-  //     secondInputValue
-  //     .split(' ')
-  //     [secondInputValue.split(' ').length - 1].toString(),
-  //   );
-  //   if (
-  //     !globelArray.includes(
-  //       secondInputValue
-  //         .split(' ')
-  //         [secondInputValue.split(' ').length - 1].toString(),
-  //     )
-  //   ) {
-  //     setGlobelArray([
-  //       ...globelArray,
-  //       secondInputValue
-  //         .split(' ')
-  //         [secondInputValue.split(' ').length - 1].toString(),
-  //     ]);
-  //   }
-
-  //   // setSecondInputValue('');
-  // }, [splitDataNumber]);
 
   const HandleInputChange = e => {
     //   // if(inputValue){
@@ -146,10 +37,7 @@ const TextView = () => {
     //   // }
     //   // HandleString('guru guru     @Tony_  guru');
   };
-  // const HandleInputChange1 = e => {
-  //   console.log('textInputRef');
-  // };
-  // console.log(secondInputValue, 'secondInputvalue');
+
   const handleKeyPress = ({nativeEvent: {key: keyValue}}) => {
     if (keyValue === 'Backspace') {
       setBackspace(true);
@@ -192,10 +80,6 @@ const TextView = () => {
     );
   };
 
-  // function renderSuggestions(){
-  //   showUserModal(true);
-  //   inputData('User');
-  // }
   const suggestionsForHashtags = [
     {
       name: 'parallel_database_alignment',
@@ -313,8 +197,6 @@ const TextView = () => {
           }
         }
       }
-
-      // setMentionInputValue()
     }
 
     return (
@@ -429,31 +311,6 @@ const TextView = () => {
   }
   return (
     <View style={styles.container}>
-      {/*inputValue.length ? (
-          <View style={styles.textResultBox}>
-            <Text style={styles.textResult}>
-              {inputValue
-                .split(' ')
-                .map(text =>
-                  text.charAt(0) == '@' ? (
-                    <Text style={{color: '#3EDBF0'}}>
-                      {text.length > 17
-                        ? text.substring(0, 17 - 3) + '...'
-                        : text + ' '}
-                    </Text>
-                  ) : text.charAt(0) == '#' ? (
-                    <Text style={{color: '#3EDBF0'}}>
-                      {text.length > 17
-                        ? text.substring(0, 17 - 3) + '...'
-                        : text + ' '}
-                    </Text>
-                  ) : (
-                    <Text style={{color: 'black'}}>{text + ' '}</Text>
-                  ),
-                )}
-            </Text>
-          </View>
-                  ) : null*/}
       <ScrollView>
         <MentionInput
           value={mentionInputValue}
@@ -487,53 +344,6 @@ const TextView = () => {
           isInsertSpaceAfterMention={true}
           allowedSpacesCount={1}
         />
-
-        {/*
-        <TextInput
-          ref={textInputRef}
-          multiline={true}
-          numberOfLines={3}
-          style={[
-            styles.input1,
-            {
-              color:
-                secondInputValue
-                  .split(' ')
-                  [secondInputValue.split(' ').length - 1].charAt(0) == '@' ||
-                secondInputValue
-                  .split(' ')
-                  [secondInputValue.split(' ').length - 1].charAt(0) == '#'
-                  ? '#3EDBF0'
-                  : 'black',
-            },
-          ]}
-          onChangeText={HandleInputChange}
-          // value={secondInputValue}
-          placeholder="."
-          onKeyPress={handleKeyPress}>
-          <Text>
-            {globelArray
-              .filter(e => e !== '')
-              .map(text =>
-                text.charAt(0) == '@' ? (
-                  <Text style={{color: '#3EDBF0'}}>
-                    {text.length > 17
-                      ? text.substring(0, 17 - 3) + '...' + ' '
-                      : text + ' '}
-                  </Text>
-                ) : text.charAt(0) == '#' ? (
-                  <Text style={{color: '#3EDBF0'}}>
-                    {text.length > 17
-                      ? text.substring(0, 17 - 3) + '...'
-                      : text}
-                  </Text>
-                ) : (
-                  <Text style={{color: 'black'}}>{text + ' '}</Text>
-                ),
-              )}
-          </Text>
-        </TextInput>
-                */}
       </ScrollView>
 
       {/* <View>{HandleString('guruvingesh guru...     @Tony_  guru')}</View>*/}
@@ -702,17 +512,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    //     borderWidth: 0.5,
+
     borderBottomColor: 'gray',
     backgroundColor: 'white',
     borderBottomWidth: 0.5,
-    //     borderRadius: 10,
-    //     borderColor: 'gray',
-    //     marginBottom: 30,
-    //     borderWidth: 0.5,
-    //     borderRadius: 10,
-    //     borderColor: 'gray',
+
     padding: 10,
-    //     padding: 20,
   },
 });

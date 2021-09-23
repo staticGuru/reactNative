@@ -14,7 +14,7 @@ function call(){
      route.params.url !== 'u' ? (
         <Video
         ref={cameraRef}
-          source={{uri: "https://www.youtube.com/watch?v=cEBkvm0-rg0",mainVer: 1, patchVer: 0}} // Can be a URL or a local file.
+          source={{uri:route.params.url ,mainVer: 1, patchVer: 0}} // Can be a URL or a local file.
           controls={true}
 
           resizeMode="cover"  
