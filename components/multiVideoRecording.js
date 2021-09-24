@@ -13,7 +13,7 @@ import Video from 'react-native-video';
 import FlatButton from './audioButton';
 import Camera from './camera';
 
-class CameraSetup extends PureComponent {
+class MultiVideoRecording extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +23,7 @@ class CameraSetup extends PureComponent {
       post: false,
       seconds: 60,
       timer: '00:00:00',
+      videolist: [],
     };
     this.interval;
   }
@@ -30,11 +31,11 @@ class CameraSetup extends PureComponent {
     console.log('componentDidUpdate');
     this.setState({seconds: 60});
   }
-  
+
   startCountdown(seconds) {
     let counter = seconds;
 
-     this.interval = setInterval(() => {
+    this.interval = setInterval(() => {
       console.log(counter);
       this.setState({seconds: counter});
       counter--;
@@ -46,78 +47,6 @@ class CameraSetup extends PureComponent {
       }
     }, 1000);
   }
-
-  render() {
-    return this.state.post === false ? (
-      <View style={styles.container}>
-        <View style={styles.buttons1}>
-          <FlatButton text="Text" onPress={this.HandleText.bind(this)} />
-          <FlatButton text="Audio" onPress={this.HandleAudio.bind(this)} />
-          <FlatButton text="Video" onPress={this.HandleVideo.bind(this)} />
-        </View>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          orientation="portrait"
-        />
-        <View
-          style={{
-            flex: 0,
-            flexDirection: 'row',
-            position: 'relative',
-            justifyContent: 'center',
-          }}>
-          <Text style={styles.countdown}>{this.state.seconds}</Text>
-        </View>
-        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
-          <TouchableOpacity
-            onPress={
-              this.state.recording !== 'stop'
-                ? this.takePicture.bind(this)
-                : this.stopVideo.bind(this)
-            }
-            style={styles.capture}>
-            <Text style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>
-              {this.state.recording !== 'stop' ? 'start' : 'stop'}
-            </Text>
-          </TouchableOpacity>
-
-          {this.state.count === 1 ? (
-            <TouchableOpacity
-              onPress={this.postVideo.bind(this)}
-              style={styles.capture}>
-              <Text style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>
-                {' '}
-                post{' '}
-              </Text>
-            </TouchableOpacity>
-          ) : null}
-        </View>
-      </View>
-    ) : (
-      <Camera uri={this.state.dataUri} />
-    );
-  }
-
-  HandleText = () => {
-    console.log('video');
-    this.props.setVideo(false);
-    this.props.setAudio(false);
-    this.props.setText(true);
-  };
-  HandleAudio = () => {
-    console.log('video');
-    this.props.setVideo(false);
-    this.props.setAudio(true);
-    this.props.setText(false);
-  };
-  HandleVideo = () => {
-    console.log('video');
-    this.props.setVideo(false);
-  };
 
   passVideo = async () => {
     if (this.camera) {
@@ -154,7 +83,9 @@ class CameraSetup extends PureComponent {
 
         count: 0,
       }));
-      this.props.navigation.navigate('Post', {url: this.state.dataUri});
+      this.props.navigation.navigate('MultiVideoRendering', {
+        urlList: this.state.videolist,
+      });
 
       this.setState(prevState => ({
         ...prevState,
@@ -165,23 +96,93 @@ class CameraSetup extends PureComponent {
     }
   };
   takePicture = async () => {
-    this.setState(prevState => ({...prevState, recording: 'stop'}));
+    this.setState(prevState => ({...prevState, recording: 'stop', count: 0}));
 
-    this.startCountdown(60);
+    this.startCountdown(61);
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.recordAsync(options);
-      this.setState(prevState => ({...prevState, dataUri: data.uri}));
+      this.setState(prevState => ({
+        dataUri: data.uri,
+        videolist: [...prevState.videolist, data.uri],
+      }));
     }
   };
   stopVideo = async () => {
     if (this.camera) {
       console.log('video stopped');
-      clearInterval(this.interval)
-      this.setState({count: 1});
-      this.camera.stopRecording();
+
+      this.setState(prevState => ({
+        ...prevState,
+        recording: 'start',
+        count: 1,
+      }));
+      clearInterval(this.interval);
+      await this.camera.stopRecording();
     }
   };
+  HandleVideo = () => {
+    this.setState({seconds: 60, count: 0});
+  };
+  render() {
+    return this.state.post === false ? (
+      <View style={styles.container}>
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.back}
+          orientation="portrait"
+        />
+        <View
+          style={{
+            flex: 0,
+            flexDirection: 'row',
+            position: 'relative',
+            justifyContent: 'center',
+          }}>
+          <Text style={styles.countdown}>{this.state.seconds}</Text>
+        </View>
+        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+          {this.state.count === 1 ? (
+            <TouchableOpacity
+              onPress={this.HandleVideo.bind(this)}
+              style={styles.capture}>
+              <Text style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>
+                Add +
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+          {this.state.count !== 1 ? (
+            <TouchableOpacity
+              onPress={
+                this.state.recording !== 'stop'
+                  ? this.takePicture.bind(this)
+                  : this.stopVideo.bind(this)
+              }
+              style={styles.capture}>
+              <Text style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>
+                {this.state.recording !== 'stop' ? 'start' : 'stop'}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+
+          {this.state.count === 1 ? (
+            <TouchableOpacity
+              onPress={this.postVideo.bind(this)}
+              style={styles.capture}>
+              <Text style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>
+                post
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+    ) : (
+      <Camera uri={this.state.dataUri} />
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -220,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CameraSetup;
+export default MultiVideoRecording;

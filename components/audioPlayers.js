@@ -44,10 +44,6 @@ class AudioPlayers extends Component {
   }
   onStartPlay = async () => {
     console.log('onStartPlay');
-    //? Custom path
-    // const msg = await this.audioRecorderPlayer.startPlayer(this.path);
-
-    //? Default path
     const msg = await this.audioRecorderPlayer.startPlayer();
     const volume = await this.audioRecorderPlayer.setVolume(1.0);
     console.log(`file: ${msg}`, `volume: ${volume}`);
@@ -107,13 +103,7 @@ class AudioPlayers extends Component {
     };
 
     console.log('audioSet', audioSet);
-    //? Custom path
-    // const uri = await this.audioRecorderPlayer.startRecorder(
-    //   this.path,
-    //   audioSet,
-    // );
-
-    //? Default path
+   
     const uri = await this.audioRecorderPlayer.startRecorder(
       undefined,
       audioSet,
@@ -123,7 +113,7 @@ class AudioPlayers extends Component {
          console.log('record-back', this.state.counter, parseInt(Math.floor(e.currentPosition)/1000),parseFloat(this.state.recordTime));
        
      
-         // console.log(this.state.thrsholdTime - Math.floor(e.currentPosition));
+        
      if(parseInt(this.state.counter) ==0){
       console.log(Math.floor(e.currentPosition));
       this.setState({
@@ -131,18 +121,21 @@ class AudioPlayers extends Component {
         recordTime: this.audioRecorderPlayer.mmssss(
           0
         ),
-        //     thrsholdTime:this.thrsholdTime-this.recordTime
+        
       });
         this.onStopRecord();
      }else{
-      this.setState({
-        recordSecs: e.currentPosition,
-        recordTime: this.audioRecorderPlayer.mmssss(
-          this.state.thrsholdTime -Math.floor(e.currentPosition),
-        ),
-        counter:this.state.counter-1
-        //     thrsholdTime:this.thrsholdTime-this.recordTime
-      });
+      
+        this.setState({
+          recordSecs: e.currentPosition,
+          recordTime: this.audioRecorderPlayer.mmssss(
+            this.state.thrsholdTime -Math.floor(e.currentPosition),
+          ),
+          counter:this.state.counter-1
+          //     thrsholdTime:this.thrsholdTime-this.recordTime
+        });
+       
+  
      }
 
     
