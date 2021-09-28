@@ -98,7 +98,7 @@ class MultiVideoRecording extends PureComponent {
   takePicture = async () => {
     this.setState(prevState => ({...prevState, recording: 'stop', count: 0}));
 
-    this.startCountdown(61);
+    this.startCountdown(60);
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.recordAsync(options);
